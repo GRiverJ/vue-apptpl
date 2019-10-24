@@ -18,9 +18,9 @@
                 4
             </div>
             <!--详情页-->
-            <transition name="slide-fade">
+            <transition name="slide-right" v-on:after-enter="afterEnterDetail">
                 <div class="fragment-page" v-show="detail_active === 1" style="background: white;z-index: 100">
-                    <detail v-bind:id="detail_id" @changeTabbar="changeTabbar" @hideMain="hideMain"></detail>
+                    <detail v-bind:id="detail_id" @changeTabbar="changeTabbar" ></detail>
                 </div>
             </transition>
         </div>
@@ -69,22 +69,26 @@
             },
             changeTabbar(active){
                 this.main_active = active;
-                this.detail_active = 0;
+                if(this.detail_active){
+                    this.detail_active = 0;
+                }
             },
             hideMain(){
-                window.console.log('hideMain');
                 this.main_active = -1;
-            }
+            },
+            afterEnterDetail(){
+                this.hideMain();
+            },
         },
         components: {
             detail : Detail,
             HomeList : HomeList,
         },
         deactivated() {
-            window.console.log('main deactivated');
+            // window.console.log('main deactivated');
         },
         activated() {
-            window.console.log('main activated');
+            // window.console.log('main activated');
         }
     }
 </script>
@@ -98,17 +102,15 @@
         overflow-y: scroll;
     }
 
-    /* 可以设置不同的进入和离开动画 */
     /* 设置持续时间和动画函数 */
-    .slide-fade-enter-active {
+    .slide-right-enter-active {
         transition: all .3s ease;
     }
-    .slide-fade-leave-active {
+    .slide-right-leave-active {
         transition: all .3s ease;
     }
-    .slide-fade-enter, .slide-fade-leave-to
-        /* .slide-fade-leave-active for below version 2.1.8 */ {
-        transform: translateX(414px);
+    .slide-right-enter, .slide-right-leave-to {
+        transform: translateX(100%);
         /*opacity: 0;*/
     }
 </style>
