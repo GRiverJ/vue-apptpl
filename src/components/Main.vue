@@ -91,7 +91,8 @@
 
 <style scoped>
     .fragment-page {
-        position: absolute;
+        position: fixed;
+        top: 0;
         width: 100%;
         height: 100vh;
         overflow-y: scroll;
