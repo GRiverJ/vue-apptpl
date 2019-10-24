@@ -52,6 +52,6 @@ new Vue({
 }).$mount("#app");
 
 if(window.location.hash == '#/'){
-  router.push({ path: '/home'})
+  router.push({ path: '/main'});
 }
 

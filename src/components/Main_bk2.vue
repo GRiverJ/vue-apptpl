@@ -1,30 +1,18 @@
 <template>
     <div>
         <div>
-            <!--首页-->
-            <div class="fragment-page" v-show="main_active === 0">
+            <div class="fragment-page" v-show="active === 0">
                 <HomeList @jumpToDetail="jumpToDetail"></HomeList>
             </div>
-            <div class="fragment-page" v-show="main_active === 1">
-                1
+            <div class="fragment-page" v-show="active === 1">1</div>
+            <div class="fragment-page" v-show="active === 2">2</div>
+            <div class="fragment-page" v-show="active === 3">3</div>
+            <div class="fragment-page" v-show="active === 4">4</div>
+            <div class="fragment-page" v-show="active === 100" style="background: white;z-index: 100">
+                <detail v-bind:id="detail_id" @changeTabbar="changeTabbar"></detail>
             </div>
-            <div class="fragment-page" v-show="main_active === 2">
-                2
-            </div>
-            <div class="fragment-page" v-show="main_active === 3">
-                3
-            </div>
-            <div class="fragment-page" v-show="main_active === 4">
-                4
-            </div>
-            <!--详情页-->
-            <transition name="slide-fade">
-                <div class="fragment-page" v-show="detail_active === 1" style="background: white;z-index: 100">
-                    <detail v-bind:id="detail_id" @changeTabbar="changeTabbar" @hideMain="hideMain"></detail>
-                </div>
-            </transition>
         </div>
-        <van-tabbar v-model="main_active" v-show="main_active !== -1">
+        <van-tabbar v-model="active">
             <van-tabbar-item icon="wap-home">首页</van-tabbar-item>
             <van-tabbar-item icon="cluster">社交圈</van-tabbar-item>
             <van-tabbar-item icon="gem">升级权益</van-tabbar-item>
@@ -43,8 +31,7 @@
         name: "Main",
         data() {
             return {
-                main_active: 0,
-                detail_active: 0,
+                active: 0,
                 home_list_data: [],
                 pull_down_loading: false,
                 pull_up_loading: false,
@@ -63,18 +50,40 @@
         },
         methods: {
             jumpToDetail(id) {
-                // this.$router.push({path: "/detail/" + id});
                 this.detail_id = id;
-                this.detail_active = 1;
+                this.active = 100;
+            },
+            onLoad() {
+                // 异步更新数据
+                setTimeout(() => {
+                    for (let i = 0; i < 20; i++) {
+                        this.home_list_data.push(this.home_list_data.length + 1);
+                    }
+                    // 加载状态结束
+                    this.pull_up_loading = false;
+
+                    // 数据全部加载完成
+                    if (this.home_list_data.length >= 400) {
+                        this.pull_up_finished = true;
+                    }
+                }, 500);
+            },
+            onRefresh() {
+                setTimeout(() => {
+                    this.$toast('刷新成功');
+                    this.pull_down_loading = false;
+                    this.home_list_data = [];
+                    for (let i = 0; i < 20; i++) {
+                        this.home_list_data.push(this.home_list_data.length + 1);
+                    }
+                    // 加载状态结束
+                    this.pull_up_loading = false;
+                }, 500);
             },
             changeTabbar(active){
-                this.main_active = active;
-                this.detail_active = 0;
+                window.console.log('changeTabbar');
+                this.active = active;
             },
-            hideMain(){
-                window.console.log('hideMain');
-                this.main_active = -1;
-            }
         },
         components: {
             detail : Detail,
@@ -95,19 +104,5 @@
         width: 100%;
         height: 100vh;
         overflow-y: scroll;
-    }
-
-    /* 可以设置不同的进入和离开动画 */
-    /* 设置持续时间和动画函数 */
-    .slide-fade-enter-active {
-        transition: all .3s ease;
-    }
-    .slide-fade-leave-active {
-        transition: all .3s ease;
-    }
-    .slide-fade-enter, .slide-fade-leave-to
-        /* .slide-fade-leave-active for below version 2.1.8 */ {
-        transform: translateX(414px);
-        /*opacity: 0;*/
     }
 </style>

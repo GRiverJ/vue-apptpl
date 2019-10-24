@@ -41,4 +41,9 @@ export default {
 .app-tabbar-item-text{
   font-size: .5rem;
 }
+    .fixed-navbar{
+        position: fixed;
+        top: 0;
+        width: 100%;
+    }
 </style>

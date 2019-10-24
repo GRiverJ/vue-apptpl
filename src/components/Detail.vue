@@ -25,6 +25,10 @@
                 // var id = this.$route.params.id;
                 // this.username = '';
                 // window.console.log(id);
+                var _this = this;
+                setTimeout(function () {
+                    _this.$emit('hideMain');
+                }, 300);
             }
         },
         data() {
